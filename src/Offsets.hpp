@@ -4,7 +4,7 @@
 
 // 2023-04-01 09:36:05.706428700 UTC
 
-namespace hazedumper {
+namespace Offsets {
 	constexpr ::std::int64_t timestamp = 1680341765;
 	namespace netvars {
 		constexpr ::std::ptrdiff_t cs_gamerules_data = 0x0;
