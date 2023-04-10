@@ -34,22 +34,22 @@ void Modules::VisualThread() noexcept {
 		const auto localPlayer = Memory::Read<uintptr_t>(Globals::processHandle, Globals::clientAddress + Offsets::signatures::dwLocalPlayer);
 
 		if (localPlayer) {
-			if (Globals::glow) {
-				const auto glowObjectManager = Memory::Read<uintptr_t>(Globals::processHandle, Globals::clientAddress + Offsets::signatures::dwGlowObjectManager);
+			const auto glowObjectManager = Memory::Read<uintptr_t>(Globals::processHandle, Globals::clientAddress + Offsets::signatures::dwGlowObjectManager);
 
-				for (int i = 1; i <= 64; ++i) {
-					const auto entity = Memory::Read<uintptr_t>(Globals::processHandle, Globals::clientAddress + Offsets::signatures::dwEntityList + i * 0x10);
+			for (int i = 1; i <= 64; ++i) {
+				const auto entity = Memory::Read<uintptr_t>(Globals::processHandle, Globals::clientAddress + Offsets::signatures::dwEntityList + i * 0x10);
 
-					if (entity) {
-						const auto entityHealth = Memory::Read<std::int32_t>(Globals::processHandle, entity + Offsets::netvars::m_iHealth);
-						const auto entityLifeState = Memory::Read<std::int32_t>(Globals::processHandle, entity + Offsets::netvars::m_lifeState);
+				if (entity) {
+					const auto entityHealth = Memory::Read<std::int32_t>(Globals::processHandle, entity + Offsets::netvars::m_iHealth);
+					const auto entityLifeState = Memory::Read<std::int32_t>(Globals::processHandle, entity + Offsets::netvars::m_lifeState);
 						
-						if (entityHealth > 0 && entityLifeState == 0) {
-							const auto localTeam = Memory::Read<std::int32_t>(Globals::processHandle, localPlayer + Offsets::netvars::m_iTeamNum);
-							const auto entityTeam = Memory::Read<std::int32_t>(Globals::processHandle, entity + Offsets::netvars::m_iTeamNum);
-							const auto glowIndex = Memory::Read<std::int32_t>(Globals::processHandle, entity + Offsets::netvars::m_iGlowIndex);
+					if (entityHealth > 0 && entityLifeState == 0) {
+						const auto localTeam = Memory::Read<std::int32_t>(Globals::processHandle, localPlayer + Offsets::netvars::m_iTeamNum);
+						const auto entityTeam = Memory::Read<std::int32_t>(Globals::processHandle, entity + Offsets::netvars::m_iTeamNum);
+						const auto glowIndex = Memory::Read<std::int32_t>(Globals::processHandle, entity + Offsets::netvars::m_iGlowIndex);
 
-							if (entityTeam != localTeam) {
+						if (entityTeam != localTeam) {
+							if (Globals::glow) {
 								Memory::Write<float>(Globals::processHandle, glowObjectManager + (glowIndex * 0x38) + 0x8, Globals::glowEnemyColor[0]); // Red
 								Memory::Write<float>(Globals::processHandle, glowObjectManager + (glowIndex * 0x38) + 0xC, Globals::glowEnemyColor[1]); // Green
 								Memory::Write<float>(Globals::processHandle, glowObjectManager + (glowIndex * 0x38) + 0x10, Globals::glowEnemyColor[2]); // Blue
@@ -58,16 +58,16 @@ void Modules::VisualThread() noexcept {
 								Memory::Write<bool>(Globals::processHandle, glowObjectManager + (glowIndex * 0x38) + 0x28, true);
 								Memory::Write<bool>(Globals::processHandle, glowObjectManager + (glowIndex * 0x38) + 0x29, false);
 							}
-							else {
-								if (Globals::glowTeam) {
-									Memory::Write<float>(Globals::processHandle, glowObjectManager + (glowIndex * 0x38) + 0x8, Globals::glowTeamColor[0]); // Red
-									Memory::Write<float>(Globals::processHandle, glowObjectManager + (glowIndex * 0x38) + 0xC, Globals::glowTeamColor[1]); // Green
-									Memory::Write<float>(Globals::processHandle, glowObjectManager + (glowIndex * 0x38) + 0x10, Globals::glowTeamColor[2]); // Blue
-									Memory::Write<float>(Globals::processHandle, glowObjectManager + (glowIndex * 0x38) + 0x14, Globals::glowTeamColor[3]); // Alpha
+						}
+						else {
+							if (Globals::glow && Globals::glowTeam) {
+								Memory::Write<float>(Globals::processHandle, glowObjectManager + (glowIndex * 0x38) + 0x8, Globals::glowTeamColor[0]); // Red
+								Memory::Write<float>(Globals::processHandle, glowObjectManager + (glowIndex * 0x38) + 0xC, Globals::glowTeamColor[1]); // Green
+								Memory::Write<float>(Globals::processHandle, glowObjectManager + (glowIndex * 0x38) + 0x10, Globals::glowTeamColor[2]); // Blue
+								Memory::Write<float>(Globals::processHandle, glowObjectManager + (glowIndex * 0x38) + 0x14, Globals::glowTeamColor[3]); // Alpha
 
-									Memory::Write<bool>(Globals::processHandle, glowObjectManager + (glowIndex * 0x38) + 0x28, true);
-									Memory::Write<bool>(Globals::processHandle, glowObjectManager + (glowIndex * 0x38) + 0x29, false);
-								}
+								Memory::Write<bool>(Globals::processHandle, glowObjectManager + (glowIndex * 0x38) + 0x28, true);
+								Memory::Write<bool>(Globals::processHandle, glowObjectManager + (glowIndex * 0x38) + 0x29, false);
 							}
 						}
 					}
