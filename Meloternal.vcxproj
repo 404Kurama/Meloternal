@@ -149,9 +149,8 @@
     <ClCompile Include="external\imgui\imgui_tables.cpp" />
     <ClCompile Include="external\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\Gui.cpp" />
-    <ClCompile Include="src\Modules.h" />
-    <ClCompile Include="src\Modules.cpp" />
     <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\Modules.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external\imgui\imconfig.h" />
@@ -165,6 +164,7 @@
     <ClInclude Include="src\Globals.h" />
     <ClInclude Include="src\Gui.h" />
     <ClInclude Include="src\Memory.hpp" />
+    <ClInclude Include="src\Modules.h" />
     <ClInclude Include="src\Offsets.hpp" />
   </ItemGroup>
   <ItemGroup>

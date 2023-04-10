@@ -3,7 +3,7 @@
 #include <TlHelp32.h>
 
 namespace Memory {
-	DWORD GetProcessId(const wchar_t* processName) noexcept {
+	inline DWORD GetProcessId(const wchar_t* processName) noexcept {
 		DWORD pid = 0;
 		HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
 
@@ -24,7 +24,7 @@ namespace Memory {
 		return pid;
 	}
 
-	DWORD GetModuleAddress(const DWORD pid, const wchar_t* moduleName) {
+	inline DWORD GetModuleAddress(const DWORD pid, const wchar_t* moduleName) {
 		DWORD address = 0;
 		HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, pid);
 
@@ -46,14 +46,14 @@ namespace Memory {
 	}
 
 	template <typename T>
-	T Read(const HANDLE process, const DWORD address) noexcept {
+	inline T Read(const HANDLE process, const DWORD address) noexcept {
 		T value = {};
 		ReadProcessMemory(process, reinterpret_cast<LPCVOID>(address), &value, sizeof(T), nullptr);
 		return value;
 	}
 
 	template <typename T>
-	T Write(const HANDLE process, const DWORD address, const T& value) noexcept {
+	inline T Write(const HANDLE process, const DWORD address, const T& value) noexcept {
 		return WriteProcessMemory(process, reinterpret_cast<LPVOID>(address), &value, sizeof(T), nullptr);
 	}
 }

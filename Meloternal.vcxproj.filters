@@ -42,9 +42,6 @@
     <ClCompile Include="external\imgui\imgui_impl_dx9.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Modules.h">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Modules.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -80,10 +77,13 @@
     <ClInclude Include="src\Globals.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Offsets.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="src\Memory.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Offsets.hpp">
+    <ClInclude Include="src\Modules.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
