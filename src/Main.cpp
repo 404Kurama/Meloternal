@@ -5,7 +5,7 @@
 
 INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE previousInstance, PSTR arguments, INT commandShow) {
 	// Create Gui
-	Gui::CreateHWindow("Gay", "GayClass");
+	Gui::CreateHWindow("Meloternal", "Meloternal");
 	Gui::CreateDevice();
 	Gui::CreateImGui();
 
