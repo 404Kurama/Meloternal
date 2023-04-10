@@ -204,7 +204,9 @@ void Gui::Render() noexcept {
 	ImGui::Checkbox("Glow", &Globals::glow);
 
 	ImGui::Text(">> Visuals Settings <<");
-	ImGui::ColorEdit4("Glow Color", Globals::glowColor);
+	ImGui::Checkbox("Glow Team", &Globals::glowTeam);
+	ImGui::ColorEdit4("Glow Team Color", Globals::glowTeamColor);
+	ImGui::ColorEdit4("Glow Enemy Color", Globals::glowEnemyColor);
 
 	ImGui::End();
 }
