@@ -1,8 +1,10 @@
 #pragma once
+#include "Memory.hpp"
 #include <cstdint>
 
-namespace globals {
+namespace Globals {
 	// Address
+	inline HANDLE processHandle;
 	inline std::uintptr_t clientAddress = 0;
 
 	// Modules

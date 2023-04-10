@@ -1,5 +1,7 @@
 #include "Gui.h"
+#include "Memory.hpp"
 #include "Modules.h"
+#include "Globals.h"
 
 #include <Windows.h>
 #include <thread>
@@ -38,6 +40,17 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE previousInstance, PSTR argume
 			Sleep(200UL);
 		}
 	}
+
+	HANDLE handle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, processId);
+
+	if (!handle) {
+		std::cout << "Couldn't get CS:GO handle." << std::endl;
+		system("pause");
+		return 0;
+	}
+
+	Globals::processHandle = handle;
+	Globals::clientAddress = client;
 
 	// Printing Info
 	std::cout << "----------------------------------------" << std::endl;
