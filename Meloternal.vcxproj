@@ -163,6 +163,7 @@
     <ClInclude Include="src\Globals.h" />
     <ClInclude Include="src\Gui.h" />
     <ClInclude Include="src\Memory.hpp" />
+    <ClInclude Include="src\Offsets.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />

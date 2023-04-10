@@ -3,8 +3,14 @@
 
 #include <Windows.h>
 #include <thread>
+#include <iostream>
 
 INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE previousInstance, PSTR arguments, INT commandShow) {
+	// Create Console
+	AllocConsole();
+	freopen_s((FILE**)stdout, "CONOUT$", "w", stdout);
+	std::cout << "Welcome to Melonternal." << std::endl;
+
 	// Create Gui
 	Gui::CreateHWindow("Meloternal", "Meloternal");
 	Gui::CreateDevice();
