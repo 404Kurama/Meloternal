@@ -1,5 +1,5 @@
 #include "Gui.h"
-#include "Memory.hpp"
+#include "Modules.h"
 
 #include <Windows.h>
 #include <thread>
@@ -49,6 +49,9 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE previousInstance, PSTR argume
 	std::cout << "Found game process minimize console in 3s" << std::endl;
 	Sleep(3000UL);
 	ShowWindow(GetConsoleWindow(), SW_MINIMIZE);
+
+	// Modules
+	std::thread(Modules::MovementThread).detach();
 
 	// Create Gui
 	Gui::CreateHWindow("Meloternal", "Meloternal");
