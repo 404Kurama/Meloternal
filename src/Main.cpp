@@ -1,4 +1,5 @@
 #include "Gui.h"
+#include "Memory.hpp"
 
 #include <Windows.h>
 #include <thread>
