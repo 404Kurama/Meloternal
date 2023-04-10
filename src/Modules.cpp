@@ -58,6 +58,10 @@ void Modules::VisualThread() noexcept {
 								Memory::Write<bool>(Globals::processHandle, glowObjectManager + (glowIndex * 0x38) + 0x28, true);
 								Memory::Write<bool>(Globals::processHandle, glowObjectManager + (glowIndex * 0x38) + 0x29, false);
 							}
+
+							if (Globals::radar) {
+								Memory::Write<bool>(Globals::processHandle, entity + Offsets::netvars::m_bSpotted, true);
+							}
 						}
 						else {
 							if (Globals::glow && Globals::glowTeam) {

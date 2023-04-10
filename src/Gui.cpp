@@ -202,6 +202,7 @@ void Gui::Render() noexcept {
 
 	ImGui::Text(">> Visuals Modules <<");
 	ImGui::Checkbox("Glow", &Globals::glow);
+	ImGui::Checkbox("Radar", &Globals::radar);
 
 	ImGui::Text(">> Visuals Settings <<");
 	ImGui::Checkbox("Glow Team", &Globals::glowTeam);

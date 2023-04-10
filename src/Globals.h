@@ -9,6 +9,7 @@ namespace Globals {
 	// Modules
 	inline bool bhop = false;
 	inline bool glow = false;
+	inline bool radar = false;
 
 	// Modules Settings
 	inline bool glowTeam = true;
