@@ -27,3 +27,19 @@ void Modules::MovementThread() noexcept {
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 	}
 }
+
+
+void Modules::VisualThread() noexcept {
+	while (Gui::isRunning) {
+		const auto localPlayer = Memory::Read<uintptr_t>(Globals::processHandle, Globals::clientAddress + Offsets::signatures::dwLocalPlayer);
+
+		if (localPlayer) {
+			const auto health = Memory::Read<std::int32_t>(Globals::processHandle, localPlayer + Offsets::netvars::m_iHealth);
+			const auto lifeState = Memory::Read<std::int32_t>(Globals::processHandle, localPlayer + Offsets::netvars::m_lifeState);
+			const auto flags = Memory::Read<uintptr_t>(Globals::processHandle, localPlayer + Offsets::netvars::m_fFlags);
+
+			
+		}
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
+	}
+}

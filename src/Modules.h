@@ -3,4 +3,5 @@
 
 namespace Modules {
 	void MovementThread() noexcept;
+	void VisualThread() noexcept;
 }
