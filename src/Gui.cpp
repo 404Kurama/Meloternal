@@ -198,13 +198,13 @@ void Gui::Render() noexcept {
 	ImGui::Begin("Meloternal", &isRunning, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove);
  
 	ImGui::Text(">> Movement Modules <<");
-	ImGui::Checkbox("BHop", &globals::bhop);
+	ImGui::Checkbox("BHop", &Globals::bhop);
 
 	ImGui::Text(">> Visuals Modules <<");
-	ImGui::Checkbox("Glow", &globals::glow);
+	ImGui::Checkbox("Glow", &Globals::glow);
 
 	ImGui::Text(">> Visuals Settings <<");
-	ImGui::ColorEdit4("Glow Color", globals::glowColor);
+	ImGui::ColorEdit4("Glow Color", Globals::glowColor);
 
 	ImGui::End();
 }

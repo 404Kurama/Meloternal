@@ -149,6 +149,8 @@
     <ClCompile Include="external\imgui\imgui_tables.cpp" />
     <ClCompile Include="external\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\Gui.cpp" />
+    <ClCompile Include="src\Modules.h" />
+    <ClCompile Include="src\Modules.cpp" />
     <ClCompile Include="src\Main.cpp" />
   </ItemGroup>
   <ItemGroup>
