@@ -30,5 +30,8 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE previousInstance, PSTR argume
 	Gui::DestroyDevice();
 	Gui::DestroyHWindow();
 	
+
+	// Free Console
+	FreeConsole();
 	return 0;
 }
