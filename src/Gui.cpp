@@ -143,8 +143,8 @@ void Gui::CreateImGui() noexcept {
 }
 
 void Gui::DestroyImGui() noexcept {
-	ImGui_ImplWin32_Shutdown();
 	ImGui_ImplDX9_Shutdown();
+	ImGui_ImplWin32_Shutdown();
 
 	ImGui::DestroyContext();
 }
