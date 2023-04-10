@@ -9,5 +9,5 @@ namespace globals {
 	inline bool bhop = false;
 	inline bool glow = false;
 
-	inline float glowColors[] = { 1.f, 0.f, 0.f, 1.f };
+	inline float glowColor[] = { 1.f, 0.f, 0.f, 1.f };
 }

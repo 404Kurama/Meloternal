@@ -71,6 +71,9 @@
     <ClInclude Include="external\imgui\imgui_impl_dx9.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Globals.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
