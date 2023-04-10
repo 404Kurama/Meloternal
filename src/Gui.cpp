@@ -1,4 +1,5 @@
 #include "Gui.h"
+#include "Globals.h"
 
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_dx9.h>
@@ -195,8 +196,13 @@ void Gui::Render() noexcept {
 	ImGui::SetNextWindowSize({ WIDTH, HEIGHT });
 
 	ImGui::Begin("Meloternal", &isRunning, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove);
+ 
+	ImGui::Text(">> Modules Toggle <<");
+	ImGui::Checkbox("BHop", &globals::bhop);
+	ImGui::Checkbox("Glow", &globals::glow);
 
-	ImGui::Button("test");
+	ImGui::Text(">> Modules Settings <<");
+	ImGui::ColorEdit4("Glow Color", globals::glowColor);
 
 	ImGui::End();
 }
