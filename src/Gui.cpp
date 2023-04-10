@@ -51,7 +51,7 @@ long __stdcall WindowProcess(HWND window, UINT message, WPARAM wideParameter, LP
 
 	}
 
-	return DefWindowProcW(window, message, wideParameter, longParameter);
+	return DefWindowProc(window, message, wideParameter, longParameter);
 }
 
 // Window Creation & Destruction
@@ -157,7 +157,7 @@ void Gui::BeginRender() noexcept {
 		TranslateMessage(&message);
 		DispatchMessage(&message);
 
-		if (message.message = WM_QUIT) {
+		if (message.message == WM_QUIT) {
 			isRunning = !isRunning;
 			return;
 		}
@@ -195,6 +195,8 @@ void Gui::Render() noexcept {
 	ImGui::SetNextWindowSize({ WIDTH, HEIGHT });
 
 	ImGui::Begin("Meloternal", &isRunning, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove);
+
+	ImGui::Button("test");
 
 	ImGui::End();
 }
