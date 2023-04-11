@@ -6,6 +6,10 @@
 #include <iostream>
 #include <thread>
 
+struct Color {
+	uint8_t r{ }, g{ }, b{ };
+};
+
 void Modules::MovementThread() noexcept {
 	while (Gui::isRunning) {
 		const auto localPlayer = Memory::Read<uintptr_t>(Globals::processHandle, Globals::clientAddress + Offsets::signatures::dwLocalPlayer);
@@ -62,6 +66,17 @@ void Modules::VisualThread() noexcept {
 							if (Globals::radar) {
 								Memory::Write<bool>(Globals::processHandle, entity + Offsets::netvars::m_bSpotted, true);
 							}
+
+							if (Globals::chams) {
+								int r, g, b;
+
+								r = int(Globals::chamsEnemyColor[0] * 255.0f + 0.5f);
+								g = int(Globals::chamsEnemyColor[1] * 255.0f + 0.5f);
+								b = int(Globals::chamsEnemyColor[2] * 255.0f + 0.5f);
+
+								auto color = Color{ uint8_t(r), uint8_t(g), uint8_t(b) };
+								Memory::Write<Color>(Globals::processHandle, entity + Offsets::netvars::m_clrRender, color);
+							}
 						}
 						else {
 							if (Globals::glow && Globals::glowTeam) {
@@ -73,6 +88,23 @@ void Modules::VisualThread() noexcept {
 								Memory::Write<bool>(Globals::processHandle, glowObjectManager + (glowIndex * 0x38) + 0x28, true);
 								Memory::Write<bool>(Globals::processHandle, glowObjectManager + (glowIndex * 0x38) + 0x29, false);
 							}
+
+							if (Globals::chams) {
+								int r, g, b;
+
+								r = int(Globals::chamsTeamColor[0] * 255.0f + 0.5f);
+								g = int(Globals::chamsTeamColor[1] * 255.0f + 0.5f);
+								b = int(Globals::chamsTeamColor[2] * 255.0f + 0.5f);
+
+								auto color = Color{ uint8_t(r), uint8_t(g), uint8_t(b) };
+								Memory::Write<Color>(Globals::processHandle, entity + Offsets::netvars::m_clrRender, color);
+							}
+						}
+
+						if (Globals::chams) {
+							float brightness = 30.f;
+							const auto _this = static_cast<uintptr_t>(Globals::engineAddress + Offsets::signatures::model_ambient_min - 0x2C);
+							Memory::Write<int32_t>(Globals::processHandle, Globals::engineAddress + Offsets::signatures::model_ambient_min, *reinterpret_cast<uintptr_t*>(&brightness) ^ _this);
 						}
 					}
 				}
