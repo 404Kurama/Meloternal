@@ -27,9 +27,19 @@ struct Vector3
 	}
 
 	constexpr const Vector3& ToAngle() const noexcept {
+		float pitch, yaw;
+		float hypotenuse = std::hypot(x, y);
+
+		pitch = ((double)atan(z / hypotenuse) * 180.0) / std::numbers::pi_v<float>;
+		yaw = ((double)atan(y / x) * 180.0) / std::numbers::pi_v<float>;
+
+		if (x >= 0.0) {
+			yaw += 180;
+		}
+
 		return Vector3{
-			std::atan2(-z, std::hypot(x, y)) * (180.f / std::numbers::pi_v<float>),
-			std::atan2(y, x) * (180.f / std::numbers::pi_v<float>),
+			pitch,
+			yaw,
 			0.f
 		};
 	}
