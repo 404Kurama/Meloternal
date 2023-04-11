@@ -203,11 +203,14 @@ void Gui::Render() noexcept {
 	ImGui::Text(">> Visuals Modules <<");
 	ImGui::Checkbox("Glow", &Globals::glow);
 	ImGui::Checkbox("Radar", &Globals::radar);
+	ImGui::Checkbox("Chams", &Globals::chams);
 
 	ImGui::Text(">> Visuals Settings <<");
 	ImGui::Checkbox("Glow Team", &Globals::glowTeam);
 	ImGui::ColorEdit4("Glow Team Color", Globals::glowTeamColor);
 	ImGui::ColorEdit4("Glow Enemy Color", Globals::glowEnemyColor);
+	ImGui::ColorEdit4("Chams Team Color", Globals::chamsTeamColor);
+	ImGui::ColorEdit4("Chams Enemy Color", Globals::chamsEnemyColor);
 
 	ImGui::End();
 }
