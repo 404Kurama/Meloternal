@@ -166,6 +166,7 @@
     <ClInclude Include="src\Memory.hpp" />
     <ClInclude Include="src\Modules.h" />
     <ClInclude Include="src\Offsets.hpp" />
+    <ClInclude Include="src\Vector.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />

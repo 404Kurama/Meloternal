@@ -2,6 +2,7 @@
 #include "Gui.h"
 #include "Globals.h"
 #include "Offsets.hpp"
+#include "Vector.h"
 
 #include <iostream>
 #include <thread>
@@ -9,6 +10,18 @@
 struct Color {
 	uint8_t r{ }, g{ }, b{ };
 };
+
+constexpr Vector3 CalculateAngle(const Vector3& localPosition, const Vector3& enemyPosition, const Vector3& viewAngles) noexcept {
+	return ((enemyPosition - localPosition).ToAngle() - viewAngles);
+}
+
+float CalculateMagnitude(Vector3 v1, Vector3 v2) {
+	float dx = v1.x - v2.x;
+	float dy = v1.y - v2.y;
+	float dz = v1.z - v2.z;
+
+	return std::sqrt(dx * dx + dy * dy + dz * dz);
+}
 
 void Modules::MovementThread() noexcept {
 	while (Gui::isRunning) {
@@ -110,6 +123,67 @@ void Modules::VisualThread() noexcept {
 				}
 			}
 		}
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
+	}
+}
+
+void Modules::CombatThread() noexcept {
+	while (Gui::isRunning) {
+		const auto localPlayer = Memory::Read<uintptr_t>(Globals::processHandle, Globals::clientAddress + Offsets::signatures::dwLocalPlayer);
+
+		if (localPlayer) {
+			const auto localTeam = Memory::Read<std::int32_t>(Globals::processHandle, localPlayer + Offsets::netvars::m_iTeamNum);
+
+			if (GetAsyncKeyState(VK_RBUTTON) && Globals::aimbot) {
+				const auto& clientState = Memory::Read<uintptr_t>(Globals::processHandle, Globals::engineAddress + Offsets::signatures::dwClientState);
+
+				const auto localEyePosition = Memory::Read<Vector3>(Globals::processHandle, localPlayer + Offsets::netvars::m_vecOrigin)
+					+ Memory::Read<Vector3>(Globals::processHandle, localPlayer + Offsets::netvars::m_vecViewOffset);
+
+				const auto& viewAngles = Memory::Read<Vector3>(Globals::processHandle, clientState + Offsets::signatures::dwClientState_ViewAngles);
+				const auto& aimPunch = Memory::Read<Vector3>(Globals::processHandle, localPlayer + Offsets::netvars::m_aimPunchAngle) * 2;
+
+				auto bestFov = 999999.f;
+				auto bestDist = 99999.f;
+				auto bestAngle = Vector3{};
+
+				for (int i = 1; i <= 64; ++i) {
+					const auto entity = Memory::Read<uintptr_t>(Globals::processHandle, Globals::clientAddress + Offsets::signatures::dwEntityList + i * 0x10);
+
+					if (entity) {
+						const auto entityTeam = Memory::Read<std::int32_t>(Globals::processHandle, entity + Offsets::netvars::m_iTeamNum);
+						const auto entityHealth = Memory::Read<std::int32_t>(Globals::processHandle, entity + Offsets::netvars::m_iHealth);
+						const auto entityLifeState = Memory::Read<std::int32_t>(Globals::processHandle, entity + Offsets::netvars::m_lifeState);
+						const auto entitySpottedByMask = Memory::Read<bool>(Globals::processHandle, entity + Offsets::netvars::m_bSpottedByMask);
+						const auto entityDormant = Memory::Read<bool>(Globals::processHandle, entity + Offsets::signatures::m_bDormant);
+
+						if (entityTeam != localTeam && entityHealth > 0 && entityLifeState == 0) {
+							const auto boneMatrix = Memory::Read<uintptr_t>(Globals::processHandle, entity + Offsets::netvars::m_dwBoneMatrix);
+
+							const int aimPart = 8;
+
+							const auto entityPosition = Vector3{
+								Memory::Read<float>(Globals::processHandle, boneMatrix + 0x30 * aimPart + 0x0C), // X
+								Memory::Read<float>(Globals::processHandle, boneMatrix + 0x30 * aimPart + 0x1C), // Y
+								Memory::Read<float>(Globals::processHandle, boneMatrix + 0x30 * aimPart + 0x2C), // Z
+							};
+
+							const auto angle = CalculateAngle(localEyePosition, entityPosition, viewAngles + aimPunch);
+							const auto fov = std::hypot(angle.x, angle.y);
+
+							if (fov < bestFov) {
+								bestFov = fov;
+								bestAngle = angle;
+							}
+						}
+					}
+				}
+
+				if (!bestAngle.IsZero())
+					Memory::Write<Vector3>(Globals::processHandle, clientState + Offsets::signatures::dwClientState_ViewAngles, bestAngle);
+			}
+		}
+
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 	}
 }

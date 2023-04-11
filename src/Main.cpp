@@ -68,6 +68,7 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE previousInstance, PSTR argume
 	// Modules
 	std::thread(Modules::MovementThread).detach();
 	std::thread(Modules::VisualThread).detach();
+	std::thread(Modules::CombatThread).detach();
 
 	// Create Gui
 	Gui::CreateHWindow("Meloternal", "Meloternal");

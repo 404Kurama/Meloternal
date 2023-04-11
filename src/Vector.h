@@ -22,7 +22,7 @@ struct Vector3
 		return Vector3{ x / factor, y / factor, z / factor };
 	}
 
-	constexpr const Vector3& IsZero() const noexcept {
+	constexpr const bool IsZero() const noexcept {
 		return x == 0.f && y == 0.f && z == 0.f;
 	}
 

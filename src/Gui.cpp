@@ -197,6 +197,9 @@ void Gui::Render() noexcept {
 
 	ImGui::Begin("Meloternal", &isRunning, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove);
  
+	ImGui::Text(">> Combat Modules <<");
+	ImGui::Checkbox("Aimbot", &Globals::aimbot);
+
 	ImGui::Text(">> Movement Modules <<");
 	ImGui::Checkbox("BHop", &Globals::bhop);
 
