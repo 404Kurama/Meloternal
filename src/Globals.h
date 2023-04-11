@@ -17,6 +17,6 @@ namespace Globals {
 	inline bool glowTeam = true;
 	inline float glowTeamColor[] = { 0.f, 1.f, 0.f, 1.f };
 	inline float glowEnemyColor[] = { 1.f, 0.f, 0.f, 1.f };
-	inline float chamsTeamColor[] = { 0.f, 1.f, 0.f, 1.f };
-	inline float chamsEnemyColor[] = { 1.f, 0.f, 0.f, 1.f };;
+	inline float chamsTeamColor[] = { 0.f, 1.f, 0.f };
+	inline float chamsEnemyColor[] = { 1.f, 0.f, 0.f };;
 }
