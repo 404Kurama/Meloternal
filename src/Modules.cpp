@@ -122,7 +122,7 @@ void Modules::CombatThread() noexcept {
 		if (localPlayer) {
 			const auto localTeam = Memory::Read<std::int32_t>(Globals::processHandle, localPlayer + Offsets::netvars::m_iTeamNum);
 
-			if (GetAsyncKeyState(VK_RBUTTON) && Globals::aimbot) {
+			if (GetAsyncKeyState(VK_XBUTTON1) && Globals::aimbot) {
 				const auto& clientState = Memory::Read<uintptr_t>(Globals::processHandle, Globals::engineAddress + Offsets::signatures::dwClientState);
 
 				float oldDistX = 11111111.0f;
