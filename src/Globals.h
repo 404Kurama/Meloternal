@@ -5,6 +5,7 @@ namespace Globals {
 	// Address
 	inline HANDLE processHandle;
 	inline std::uintptr_t clientAddress = 0;
+	inline std::uintptr_t engineAddress = 0;
 
 	// Modules
 	inline bool bhop = false;

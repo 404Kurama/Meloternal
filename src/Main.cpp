@@ -27,15 +27,17 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE previousInstance, PSTR argume
 		}
 	}
 
-	DWORD client = Memory::GetModuleAddress(processId, L"client.dll");
 	DWORD baseAddress = Memory::GetModuleAddress(processId, L"csgo.exe");
+	DWORD client = Memory::GetModuleAddress(processId, L"client.dll");
+	DWORD engine = Memory::GetModuleAddress(processId, L"engine.dll");
 
-	if (client == 0 || baseAddress == 0) {
+	if (client == 0 || baseAddress == 0 || engine == 0) {
 		std::cout << "Waiting for CS:GO to load..." << std::endl;
 
-		while (client == 0 || baseAddress == 0) {
-			client = Memory::GetModuleAddress(processId, L"client.dll");
+		while (client == 0 || baseAddress == 0 || engine == 0) {
 			baseAddress = Memory::GetModuleAddress(processId, L"csgo.exe");
+			client = Memory::GetModuleAddress(processId, L"client.dll");
+			engine = Memory::GetModuleAddress(processId, L"engine.dll");
 			Sleep(200UL);
 		}
 	}
