@@ -152,7 +152,7 @@ void Modules::CombatThread() noexcept {
 							// Entity Position
 							const auto boneMatrix = Memory::Read<uintptr_t>(Globals::processHandle, entity + Offsets::netvars::m_dwBoneMatrix);
 
-							const int aimPart = 7;
+							const int aimPart = 8;
 
 							const auto entityPosition = Vector3{
 								Memory::Read<float>(Globals::processHandle, boneMatrix + 0x30 * aimPart + 0x0C), // X
