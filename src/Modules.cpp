@@ -11,18 +11,6 @@ struct Color {
 	uint8_t r{ }, g{ }, b{ };
 };
 
-constexpr Vector3 CalculateAngle(const Vector3& localPosition, const Vector3& enemyPosition, const Vector3& viewAngles) noexcept {
-	return ((enemyPosition - localPosition).ToAngle() - viewAngles);
-}
-
-float CalculateMagnitude(Vector3 v1, Vector3 v2) {
-	float dx = v1.x - v2.x;
-	float dy = v1.y - v2.y;
-	float dz = v1.z - v2.z;
-
-	return std::sqrt(dx * dx + dy * dy + dz * dz);
-}
-
 void Modules::MovementThread() noexcept {
 	while (Gui::isRunning) {
 		const auto localPlayer = Memory::Read<uintptr_t>(Globals::processHandle, Globals::clientAddress + Offsets::signatures::dwLocalPlayer);
@@ -137,15 +125,9 @@ void Modules::CombatThread() noexcept {
 			if (GetAsyncKeyState(VK_RBUTTON) && Globals::aimbot) {
 				const auto& clientState = Memory::Read<uintptr_t>(Globals::processHandle, Globals::engineAddress + Offsets::signatures::dwClientState);
 
-				const auto localEyePosition = Memory::Read<Vector3>(Globals::processHandle, localPlayer + Offsets::netvars::m_vecOrigin)
-					+ Memory::Read<Vector3>(Globals::processHandle, localPlayer + Offsets::netvars::m_vecViewOffset);
-
-				const auto& viewAngles = Memory::Read<Vector3>(Globals::processHandle, clientState + Offsets::signatures::dwClientState_ViewAngles);
-				const auto& aimPunch = Memory::Read<Vector3>(Globals::processHandle, localPlayer + Offsets::netvars::m_aimPunchAngle) * 2;
-
-				auto bestFov = 999999.f;
-				auto bestDist = 99999.f;
-				auto bestAngle = Vector3{};
+				float oldDistX = 11111111.0f;
+				float oldDistY = 11111111.0f;
+				Vector3 targetPosition, locPos;
 
 				for (int i = 1; i <= 64; ++i) {
 					const auto entity = Memory::Read<uintptr_t>(Globals::processHandle, Globals::clientAddress + Offsets::signatures::dwEntityList + i * 0x10);
@@ -154,10 +136,20 @@ void Modules::CombatThread() noexcept {
 						const auto entityTeam = Memory::Read<std::int32_t>(Globals::processHandle, entity + Offsets::netvars::m_iTeamNum);
 						const auto entityHealth = Memory::Read<std::int32_t>(Globals::processHandle, entity + Offsets::netvars::m_iHealth);
 						const auto entityLifeState = Memory::Read<std::int32_t>(Globals::processHandle, entity + Offsets::netvars::m_lifeState);
-						const auto entitySpottedByMask = Memory::Read<bool>(Globals::processHandle, entity + Offsets::netvars::m_bSpottedByMask);
-						const auto entityDormant = Memory::Read<bool>(Globals::processHandle, entity + Offsets::signatures::m_bDormant);
 
 						if (entityTeam != localTeam && entityHealth > 0 && entityLifeState == 0) {
+							// Local Angles
+							auto localAngle = Memory::Read<Vector3>(Globals::processHandle, clientState + Offsets::signatures::dwClientState_ViewAngles);
+							auto aimPunch = Memory::Read<Vector3>(Globals::processHandle, localPlayer + Offsets::netvars::m_aimPunchAngle) * 2;
+
+							localAngle.z = Memory::Read<float>(Globals::processHandle, localPlayer + Offsets::netvars::m_vecViewOffset + 0x8);
+
+							// Local Positon
+							auto localPositon = Memory::Read<Vector3>(Globals::processHandle, localPlayer + Offsets::netvars::m_vecOrigin);
+
+							localPositon.z += localAngle.z;
+
+							// Entity Position
 							const auto boneMatrix = Memory::Read<uintptr_t>(Globals::processHandle, entity + Offsets::netvars::m_dwBoneMatrix);
 
 							const int aimPart = 8;
@@ -168,19 +160,55 @@ void Modules::CombatThread() noexcept {
 								Memory::Read<float>(Globals::processHandle, boneMatrix + 0x30 * aimPart + 0x2C), // Z
 							};
 
-							const auto angle = CalculateAngle(localEyePosition, entityPosition, viewAngles + aimPunch);
-							const auto fov = std::hypot(angle.x, angle.y);
+							// Calculate Angles
+							auto tempPos = localPositon - entityPosition;
+							const auto angleVec = tempPos.ToAngle();
 
-							if (fov < bestFov) {
-								bestFov = fov;
-								bestAngle = angle;
+							// Calculate Dist
+							float distX = angleVec.x - localAngle.x;
+							float distY = angleVec.y - localAngle.y;
+
+							if (distX < -89.0) {
+								distX += 360.0;
+							}
+							else if (distX > 89.0) {
+								distX -= 360.0;
+							}
+
+							if (distY < -180.0) {
+								distY += 360.0;
+							}
+							else if (distY > 180.0) {
+								distY -= 360.0;
+							}
+
+							if (distY < 0.0) {
+								distY = -distY;
+							}
+
+							// Checking Enemy
+							if (distX < (oldDistX - 0.25) && distY < (oldDistY - 0.25) && distX <= 90 && distX <= 180 && distX) {
+								oldDistX = distX;
+								oldDistY = distY;
+								targetPosition = entityPosition;
+								locPos = localPositon;
 							}
 						}
 					}
 				}
 
-				if (!bestAngle.IsZero())
-					Memory::Write<Vector3>(Globals::processHandle, clientState + Offsets::signatures::dwClientState_ViewAngles, bestAngle);
+				if (!targetPosition.IsZero()) {
+					// Calculate Angles
+					auto tempPos = locPos - targetPosition;
+					const auto angleVec = tempPos.ToAngle();
+
+					const auto angle = Vector3{ angleVec.x, angleVec.y, 0.0f };
+
+					Memory::Write<Vector3>(Globals::processHandle, clientState + Offsets::signatures::dwClientState_ViewAngles, angle);
+				}
+
+				//if (!targetPosition.IsZero())
+				//	Memory::Write<Vector3>(Globals::processHandle, clientState + Offsets::signatures::dwClientState_ViewAngles, bestAngle);
 			}
 		}
 

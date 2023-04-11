@@ -26,7 +26,7 @@ struct Vector3
 		return x == 0.f && y == 0.f && z == 0.f;
 	}
 
-	constexpr const Vector3& ToAngle() const noexcept {
+	Vector3 ToAngle() noexcept {
 		float pitch, yaw;
 		float hypotenuse = std::hypot(x, y);
 
