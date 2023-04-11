@@ -53,7 +53,7 @@ namespace Memory {
 	}
 
 	template <typename T>
-	inline T Write(const HANDLE process, const DWORD address, const T& value) noexcept {
-		return WriteProcessMemory(process, reinterpret_cast<LPVOID>(address), &value, sizeof(T), nullptr);
+	inline void Write(const HANDLE process, const DWORD address, const T& value) noexcept {
+		WriteProcessMemory(process, reinterpret_cast<LPVOID>(address), &value, sizeof(T), nullptr);
 	}
 }
