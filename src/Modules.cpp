@@ -152,7 +152,7 @@ void Modules::CombatThread() noexcept {
 							// Entity Position
 							const auto boneMatrix = Memory::Read<uintptr_t>(Globals::processHandle, entity + Offsets::netvars::m_dwBoneMatrix);
 
-							const int aimPart = 8;
+							const int aimPart = 7;
 
 							const auto entityPosition = Vector3{
 								Memory::Read<float>(Globals::processHandle, boneMatrix + 0x30 * aimPart + 0x0C), // X
@@ -187,7 +187,7 @@ void Modules::CombatThread() noexcept {
 							}
 
 							// Checking Enemy
-							if (distX < (oldDistX - 0.25) && distY < (oldDistY - 0.25) && distX <= 90 && distX <= 180 && distX) {
+							if (distX < (oldDistX - 0.25) && distY < (oldDistY - 0.25) && distX <= 5 && distY <= 5 && distX) {
 								oldDistX = distX;
 								oldDistY = distY;
 								targetPosition = entityPosition;
@@ -205,6 +205,8 @@ void Modules::CombatThread() noexcept {
 					const auto angle = Vector3{ angleVec.x, angleVec.y, 0.0f };
 
 					Memory::Write<Vector3>(Globals::processHandle, clientState + Offsets::signatures::dwClientState_ViewAngles, angle);
+
+					Sleep(1);
 				}
 
 				//if (!targetPosition.IsZero())
