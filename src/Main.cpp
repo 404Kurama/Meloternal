@@ -52,6 +52,7 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE previousInstance, PSTR argume
 
 	Globals::processHandle = handle;
 	Globals::clientAddress = client;
+	Globals::engineAddress = engine;
 
 	// Printing Info
 	std::cout << "----------------------------------------" << std::endl;
